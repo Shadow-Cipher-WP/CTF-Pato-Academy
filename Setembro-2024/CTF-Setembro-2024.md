@@ -15,7 +15,7 @@ Nos foi dado os seguintes domínios e subdomínios:
 
 Tentei acessá-los, mas não carregaram:
 
-![Primeira Imagem Aqui](./Imagens/1.jpg)
+![Primeira Imagem Aqui](https://drive.google.com/file/d/1ENcpXy79_uu_E-oOA6e0ORhEjutBOCN-/view?usp=sharing)
 
 Resolvi fazer um scan com o nmap para ver as portas que estavam abertas:
 

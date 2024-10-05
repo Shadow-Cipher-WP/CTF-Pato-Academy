@@ -46,3 +46,34 @@ Consegui logar. A partir daí, tentei várias superfícies de ataque, a maioria 
 
 O token de sessão era um base64 que, ao ser decodificado, era composto por:
 
+`<nome-do-usuário>:<hash-MD5-da-senha>`
+
+
+Fiz alguns testes modificando apenas o nome do token e codificando novamente para base64. Percebi que o nome de usuário era alterado na mensagem da página principal.
+
+![Oitava Imagem Aqui](#)
+![Nona Imagem Aqui](#)
+
+## Segunda Exploração - Upload de Imagem
+
+No diretório `/settings`, percebi um campo de upload de imagem para alterar a imagem de perfil no `/dashboard`. Quando fiz o upload, percebi que a imagem era salva da seguinte forma:
+
+`<nome-do-usuário>.<extensão-da-imagem>`
+
+
+no caminho `/uploads`. O servidor pegava o nome de usuário pelo token de sessão, então criei outro usuário chamado "wild2" para tentar trocar a imagem dentro do perfil do usuário "wild". Funcionou!
+
+![Décima Imagem Aqui](#)
+
+Com o mesmo **IDOR**, foi possível trocar a senha do usuário "wild2" através das configurações do usuário "wild".
+
+De bônus, percebi que a imagem padrão para um usuário recém-criado estava no caminho `/uploads/patonymous.jpg`. Alterei o nome de usuário no token para "patonymous" e mudei a imagem padrão. Agora, todos os novos usuários criados terão uma nova imagem padrão!
+
+## Explorando o Diretório `/chat`
+
+Explorando o diretório `/chat`, vi que se tratava de um chat com uma IA que falava diversas baboseiras. Notei que outros usuários mandavam mensagens ao mesmo tempo que eu, e as mensagens eram renderizadas no navegador. Resolvi testar um **XSS** no chat e ele aceitou a tag:
+
+```html
+<h1>TESTANDO...</h1>
+```
+![Décima Primeira Imagem Aqui](#)

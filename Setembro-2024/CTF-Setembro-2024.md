@@ -15,7 +15,7 @@ Nos foi dado os seguintes domínios e subdomínios:
 
 Tentei acessá-los, mas não carregaram:
 
-![Primeira Imagem Aqui](https://i.imgur.com/w56Z5GP.png)
+![Primeira Imagem Aqui](https://i.imgur.com/5jLf5V3.png)
 
 Resolvi fazer um scan com o nmap para ver as portas que estavam abertas:
 

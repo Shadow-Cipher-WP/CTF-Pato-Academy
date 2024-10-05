@@ -38,7 +38,7 @@ Acessei o diretório `/register` e fiz um cadastro. Notei um campo chamado **MFA
 Fui até o diretório `/login`, inseri meu login e senha, porém havia um campo **CODE**, onde provavelmente seria usado o código da página de registro. No entanto, não funcionou. Eu já havia feito um outro CTF da comunidade onde precisei gerar 2FA a partir de um código OTP, então usei um script em Python que eu já tinha no Kali para gerar o código:
 
 ![Sexta Imagem Aqui](./Imagens/6.jpg)
-![Sétima Imagem Aqui](./Imagens/7.jpg)
+![Sétima Imagem Aqui](./Imagens/7.svg)
 
 Consegui logar. A partir daí, tentei várias superfícies de ataque, a maioria sem sucesso, porém consegui identificar duas falhas interessantes.
 

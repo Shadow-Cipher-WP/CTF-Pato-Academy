@@ -101,8 +101,8 @@ Tentando acessar os subdomínios `git.tribopapaxota.org` e `hub.tribopapaxota.or
 
 Dois redirecionamentos para domínios do github.io. Fui verificar se os repositórios existem:
 
-![Décima Sexta Imagem Aqui](https://i.imgur.com/ECO0DUJ.png)
-![Décima Sétima Imagem Aqui](https://i.imgur.com/EEejYJm.png)
+![Décima Sexta Imagem Aqui](https://i.imgur.com/xeA4XKT.png)
+![Décima Sétima Imagem Aqui](https://i.imgur.com/RF9DTCI.png)
 
 Os dois estão disponíveis para criação. Temos duas falhas de subdomain takeover.
 

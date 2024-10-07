@@ -40,35 +40,40 @@ Fui até o diretório `/login`, inseri meu login e senha, porém havia um campo 
 ![Sexta Imagem Aqui](https://i.imgur.com/gt63YoX.png)
 ![Sétima Imagem Aqui](https://i.imgur.com/WisfjQk.png)
 
-Consegui logar. A partir daí, tentei várias superfícies de ataque, a maioria sem sucesso, porém consegui identificar duas falhas interessantes.
+Consegui logar. A partir daí, tentei várias superfícies de ataque, a maioria sem sucesso, porém consegui identificar algumas falhas interessantes.
 
-## Primeira Exploração - Token de Sessão
+## Explorando IDOR no Token de Sessão
 
 O token de sessão era um base64 que, ao ser decodificado, era composto por:
 
 `<nome-do-usuário>:<hash-MD5-da-senha>`
-
 
 Fiz alguns testes modificando apenas o `<nome-do-usuário>` do token e codificando novamente para base64. Percebi que o nome de usuário era alterado na mensagem da página principal.
 
 ![Oitava Imagem Aqui](https://i.imgur.com/JyFtv8S.png)
 ![Nona Imagem Aqui](https://i.imgur.com/Nl5LmqF.png)
 
-## Segunda Exploração - Upload de Imagem
+Aqui temos um **IDOR**, pois como o servidor resgata as informações do banco de dados através do nome de usuário no token, se alterarmos o nome para o nome de outro usuário, o servidor nos devolve as informações dele, que nesse sistema é apenas a imagem de perfil, mas poderia ser mais coisas.
+
+## Explorando IDOR no Upload de Imagem
 
 No diretório `/settings`, percebi um campo de upload de imagem para alterar a imagem de perfil no `/dashboard`. Quando fiz o upload, percebi que a imagem era renomeada e salva da seguinte forma:
 
 `<nome-do-usuário>.<extensão-da-imagem>`
 
-no caminho `/uploads`. O servidor pegava o nome de usuário pelo token de sessão, então criei outro usuário chamado `wild2` e tentei trocar a imagem de perfil usando o usuário `wild` apenas alterando o nome do cookie para `wild2`. Funcionou!
+No caminho `/uploads`. O servidor pegava o nome de usuário pelo token de sessão, então criei outro usuário chamado `wild2` e tentei trocar a imagem de perfil usando o usuário `wild` apenas alterando o nome do cookie para `wild2`. Funcionou!
 
 ![Décima Imagem Aqui](https://i.imgur.com/bDSIokE.png)
 
-Com o mesmo **IDOR**, foi possível trocar a senha do usuário `wild2` através das configurações do usuário `wild`.
+De bônus, percebi que a imagem padrão para um usuário recém-criado estava no caminho `/uploads/patonymous.jpg`. Alterei o nome de usuário no token para `patonymous` e consegui alterar a imagem padrão. Agora, todos os novos usuários criados terão uma nova imagem padrão da minha escolha xD!
 
-De bônus, percebi que a imagem padrão para um usuário recém-criado estava no caminho `/uploads/patonymous.jpg`. Alterei o nome de usuário no token para `patonymous` e consegui alterar a imagem padrão. Agora, todos os novos usuários criados terão uma nova imagem padrão da minha escolha!
+## Explorando IDOR na Troca de Senha
 
-## Explorando o Diretório `/chat`
+Com o mesmo **IDOR** que permite trocar a imagem de perfil de um usuário, foi possível também trocar a senha do usuário `wild2` através das configurações do usuário `wild`.
+
+Loguei com o usuário `wild`, alterei o token de sessão para `<wild2>:<hash-MD5-da-senha>`(lembrando que não alterei o hash, apenas o nome) e codifiquei novamente para base64. Fui em `/settings` e troquei a senha. Desloguei e loguei com o usuário `wild2` com a nova senha e obtive sucesso!
+
+## Explorando Stored-XSS no diretório `/chat`
 
 Explorando o diretório `/chat`, vi que se tratava de um chat com uma IA que falava diversas baboseiras. Notei que outros usuários mandavam mensagens ao mesmo tempo que eu, e as mensagens eram renderizadas no navegador. Resolvi testar um **XSS** no chat e ele aceitou a tag:
 
@@ -92,7 +97,7 @@ depois tentei logar com a senha do payload que é `987654321` e fui solicitado o
 ![Décima Terceira Imagem Aqui](https://i.imgur.com/osGa2CE.png)
 
 
-## Explorando os Subdomains git e hub
+## Explorando Subdomain Takeover nos Subdomains git e hub - 2 falhas!
 
 Tentando acessar os subdomínios `git.tribopapaxota.org` e `hub.tribopapaxota.org` no navegador não obtive sucesso. Fiz scan com nmap e percebi que eles estavam respondendo para o mesmo endereço ip que o domínio principal e com as mesmas portas abertas. Resolvi verificar o subdomínio com o comando dig para ver se recebia mais informações e obtive o seguinte:
 
